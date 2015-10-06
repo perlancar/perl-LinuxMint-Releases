@@ -36,7 +36,7 @@ our $meta = {
         python_version       => {pos=>11, schema=>'str*'},
         php_version          => {pos=>12, schema=>'str*'},
         ruby_version         => {pos=>13, schema=>'str*'},
-        ruby_version         => {pos=>13, schema=>'str*'},
+        bash_version         => {pos=>14, schema=>'str*'},
     },
     pk => 'version',
 };
@@ -44,7 +44,7 @@ our $meta = {
 our $data = do {
     no warnings 'void';
     [];
-# CODE: { require JSON; require File::Slurper; my $json = JSON->new; my $rels = $json->decode(read_text("../gudangdata-distrowatch/table/mint_release/data.json")); my $data = []; for my $r (@$rels) { my ($ver, $code) = $r->{release_name} =~ /(\d\S+) (.+)/ or die "Unknown release name pattern: $r->{release_name}"; push @$data, {version=>$ver, code_name=>$code, reldate=>$r->{release_date}, eoldate=>$r->{eol_date}, linux_version=>$r->{linux_version}, mysql_version=>$r->{mysql_version}, mariadb_version=>$r->{mariadb_version}, postgresql_version=>$r->{postgresql_version}, apache_httpd_version=>$r->{httpd_version}, nginx_version=>$r->{nginx_version}, perl_version=>$r->{perl_version}, python_version=>$r->{python_version}, php_version=>$r->{php_version}, ruby_version=>$r->{ruby_version}, bash_version=>$r->{bash_version} } } $data; }
+# CODE: { require JSON; require File::Slurper; my $json = JSON->new; my $rels = $json->decode(File::Slurper::read_text("../gudangdata-distrowatch/table/mint_release/data.json")); my $data = []; for my $r (@$rels) { my ($ver, $code) = $r->{release_name} =~ /(\d\S*) (.+)/ or die "Unknown release name pattern: $r->{release_name}"; push @$data, {version=>$ver, code_name=>$code, reldate=>$r->{release_date}, eoldate=>$r->{eol_date}, linux_version=>$r->{linux_version}, mysql_version=>$r->{mysql_version}, mariadb_version=>$r->{mariadb_version}, postgresql_version=>$r->{postgresql_version}, apache_httpd_version=>$r->{httpd_version}, nginx_version=>$r->{nginx_version}, perl_version=>$r->{perl_version}, python_version=>$r->{python_version}, php_version=>$r->{php_version}, ruby_version=>$r->{ruby_version}, bash_version=>$r->{bash_version} } } $data; }
 };
 
 my $res = gen_read_table_func(
